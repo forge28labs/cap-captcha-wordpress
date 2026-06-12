@@ -18,6 +18,7 @@ To use this plugin, you need to host your own Cap instance. You can do this by f
 - WordPress-native settings page
 - Lightweight implementation
 - Open source
+- Support for 3rd-party form builders (Formidable for now, more coming soon)
 
 ## Requirements
 
@@ -32,6 +33,12 @@ To use this plugin, you need to host your own Cap instance. You can do this by f
 3. Activate the plugin from the WordPress admin panel.
 4. Enter your Cap Captcha credentials in the plugin settings.
 5. Enable protection on the desired forms.
+
+## Form Builder Integrations
+
+### Formidable
+
+Just pop in and go! The plugin is registered as a Formidable field type, so you can add it to any of your Formidable forms. It will then protect that form with Cap Captcha. All settings are configured in the plugin settings page.
 
 ## Development
 
