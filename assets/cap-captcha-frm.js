@@ -15,6 +15,8 @@
       object.querySelectorAll("cap-widget").forEach(function (widget) {
         if (widget.token) return;
 
+        widget.style.setProperty("--cap-border-color", "#f04438");
+
         var container = widget.closest(".frm_form_field");
         if (!container || !container.id) return;
 
@@ -33,6 +35,8 @@
     function (e) {
       var widget = e.target;
       if (widget.tagName !== "CAP-WIDGET") return;
+
+      widget.style.removeProperty("--cap-border-color");
 
       var container = widget.closest(".frm_form_field");
       if (!container) return;

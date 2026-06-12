@@ -5,6 +5,13 @@ cap-widget {
   background: transparent !important;
 }
 
-.frm_blank_field cap-widget {
-  border: 1px solid var(--border-color-error, #f04438) !important;
+.wpforms-field-cap-captcha-row {
+	text-align: left !important;
+	justify-content: flex-start !important;
 }
+
+.wpforms-field-cap-captcha-row cap-widget {
+	display: inline-block;
+}
+
+

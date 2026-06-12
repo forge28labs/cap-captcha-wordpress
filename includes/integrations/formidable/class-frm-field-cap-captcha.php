@@ -25,7 +25,7 @@ class FrmFieldCapCaptcha extends FrmFieldType
     protected function new_field_settings()
     {
         return array(
-            'invalid' => __('CAPTCHA verification failed. Please try again.', 'cap-captcha'),
+            'invalid' => 'CAPTCHA verification failed. Please try again.',
             'label'   => 'none',
         );
     }
@@ -65,7 +65,7 @@ class FrmFieldCapCaptcha extends FrmFieldType
         }
 
         $endpoint = trailingslashit($options['instance_url']) . trailingslashit($options['site_key']);
-        return '<div id="' . esc_attr($args['html_id']) . '_container" style="margin-top:0.5rem;margin-bottom:1rem;">'
+        return '<div id="' . esc_attr($args['html_id']) . '_container" class="cap-captcha-wrap" style="margin-top:0.5rem;margin-bottom:1rem;">'
             . '<cap-widget data-cap-api-endpoint="' . esc_url($endpoint) . '" required></cap-widget>'
             . '</div>';
     }

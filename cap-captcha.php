@@ -18,6 +18,10 @@
 defined('ABSPATH') || exit;
 
 define('CAP_CAPTCHA_VERSION', '1.1.0');
+
+add_action('init', function () {
+    load_plugin_textdomain('cap-captcha', false, dirname(plugin_basename(__FILE__)) . '/languages');
+});
 define('CAP_CAPTCHA_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CAP_CAPTCHA_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -28,5 +32,9 @@ require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/verification.php';
 add_action('plugins_loaded', function () {
     if (class_exists('FrmFieldType')) {
         require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/integrations/formidable/formidable-integration.php';
+    }
+
+    if (class_exists('WPForms')) {
+        require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/integrations/wpforms/wpforms-integration.php';
     }
 });
