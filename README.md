@@ -1,5 +1,7 @@
 # Cap Captcha for WordPress
 
+![GitHub Release](https://img.shields.io/github/v/release/forge28labs/cap-captcha-wordpress) ![GitHub License](https://img.shields.io/github/license/forge28labs/cap-captcha-wordpress)
+
 An unofficial WordPress plugin that integrates Cap Captcha with WordPress and its comment/authentication flows.
 
 > This project is not affiliated with or endorsed by the Cap Captcha team.
