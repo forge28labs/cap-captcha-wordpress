@@ -19,7 +19,7 @@ function cap_captcha_frm_register_field_type(array $fields): array
 function cap_captcha_frm_field_class(string $class, string $field_type): string
 {
     if ('cap_captcha' === $field_type) {
-        require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/class-frm-field-cap-captcha.php';
+        require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/integrations/formidable/class-frm-field-cap-captcha.php';
         return 'FrmFieldCapCaptcha';
     }
     return $class;

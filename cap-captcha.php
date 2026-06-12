@@ -27,6 +27,6 @@ require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/verification.php';
 
 add_action('plugins_loaded', function () {
     if (class_exists('FrmFieldType')) {
-        require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/formidable-integration.php';
+        require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/integrations/formidable/formidable-integration.php';
     }
 });
