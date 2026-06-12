@@ -24,6 +24,13 @@ function cap_captcha_enqueue_widget(): void
 		return;
 	}
 
+	wp_enqueue_style(
+		'cap-captcha',
+		CAP_CAPTCHA_PLUGIN_URL . 'assets/cap-captcha.css',
+		array(),
+		CAP_CAPTCHA_VERSION
+	);
+
 	wp_enqueue_script(
 		'cap-widget',
 		'https://cdn.jsdelivr.net/npm/cap-widget',
@@ -35,11 +42,15 @@ function cap_captcha_enqueue_widget(): void
 
 function cap_captcha_inline_styles(): void
 {
-	if (! cap_captcha_should_load()) {
+	$options = get_option('cap_captcha_options');
+
+	if (empty($options)) {
 		return;
 	}
 
-	$options = get_option('cap_captcha_options');
+	if (empty($options['instance_url']) || empty($options['site_key'])) {
+		return;
+	}
 
 	$color_map = array(
 		'cap_background'          => '--cap-background',

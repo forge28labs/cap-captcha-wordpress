@@ -1,0 +1,10 @@
+cap-widget {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.frm_blank_field cap-widget {
+  border: 1px solid var(--border-color-error, #f04438) !important;
+}

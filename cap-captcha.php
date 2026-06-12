@@ -24,3 +24,9 @@ define('CAP_CAPTCHA_PLUGIN_URL', plugin_dir_url(__FILE__));
 require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/admin-settings.php';
 require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/frontend.php';
 require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/verification.php';
+
+add_action('plugins_loaded', function () {
+    if (class_exists('FrmFieldType')) {
+        require_once CAP_CAPTCHA_PLUGIN_DIR . 'includes/formidable-integration.php';
+    }
+});
