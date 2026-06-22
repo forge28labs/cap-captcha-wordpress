@@ -19,9 +19,6 @@ defined('ABSPATH') || exit;
 
 define('CAP_CAPTCHA_VERSION', '1.2.0');
 
-add_action('init', function () {
-    load_plugin_textdomain('cap-captcha', false, dirname(plugin_basename(__FILE__)) . '/languages');
-});
 define('CAP_CAPTCHA_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CAP_CAPTCHA_PLUGIN_URL', plugin_dir_url(__FILE__));
 
