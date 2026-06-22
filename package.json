@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build": "cp node_modules/cap-widget/cap.min.js assets/cap-widget.js"
+  },
+  "dependencies": {
+    "cap-widget": "^0.1.56"
+  }
+}

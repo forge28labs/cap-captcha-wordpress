@@ -63,3 +63,5 @@ This project is not affiliated with or endorsed by Cap Captcha.
 Copyright (c) 2026 Forge28
 
 Licensed under GPL-2.0-or-later.
+
+This plugin includes third-party components. See THIRD-PARTY-NOTICES.txt for full license details.
