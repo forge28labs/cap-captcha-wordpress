@@ -14,126 +14,157 @@ add_filter('preprocess_comment', 'cap_captcha_check_comment');
 
 function cap_captcha_verify_token(string $token): bool
 {
-	$options = get_option('cap_captcha_options');
-	if (empty($options['instance_url']) || empty($options['site_key']) || empty($options['secret_key'])) {
-		return false;
-	}
+    $options = get_option('cap_captcha_options');
+    if (empty($options['instance_url']) || empty($options['site_key']) || empty($options['secret_key'])) {
+        return false;
+    }
 
-	$url = trailingslashit($options['instance_url'])
-		. trailingslashit($options['site_key'])
-		. 'siteverify';
+    $url = trailingslashit($options['instance_url'])
+        . trailingslashit($options['site_key'])
+        . 'siteverify';
 
-	$response = wp_remote_post(
-		$url,
-		array(
-			'headers' => array('Content-Type' => 'application/json'),
-			'body'    => wp_json_encode(
-				array(
-					'secret'   => $options['secret_key'],
-					'response' => $token,
-				)
-			),
-			'timeout' => 30,
-		)
-	);
+    $response = wp_remote_post(
+        $url,
+        array(
+            'headers' => array('Content-Type' => 'application/json'),
+            'body'    => wp_json_encode(
+                array(
+                    'secret'   => $options['secret_key'],
+                    'response' => $token,
+                )
+            ),
+            'timeout' => 30,
+        )
+    );
 
-	if (is_wp_error($response)) {
-		return false;
-	}
+    if (is_wp_error($response)) {
+        return false;
+    }
 
-	$body = wp_remote_retrieve_body($response);
-	$data = json_decode($body, true);
+    $body = wp_remote_retrieve_body($response);
+    $data = json_decode($body, true);
 
-	return isset($data['success']) && true === $data['success'];
+    return isset($data['success']) && true === $data['success'];
 }
 
 function cap_captcha_get_token_from_request(): string
 {
-	return sanitize_text_field(wp_unslash($_POST['cap-token'] ?? ''));
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing -- all callers verify nonces before calling this
+    return sanitize_text_field(wp_unslash($_POST['cap-token'] ?? ''));
+}
+
+function cap_captcha_maybe_verify_nonce(string $action): bool
+{
+    if (! isset($_POST['_wpnonce'])) {
+        return true;
+    }
+
+    return (bool) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), $action);
 }
 
 function cap_captcha_check_login($user, string $password)
 {
-	if (empty(get_option('cap_captcha_options')['protect_login'])) {
-		return $user;
-	}
+    if (empty(get_option('cap_captcha_options')['protect_login'])) {
+        return $user;
+    }
 
-	$token = cap_captcha_get_token_from_request();
-	if (empty($token) || ! cap_captcha_verify_token($token)) {
-		return new WP_Error(
-			'cap_captcha_failed',
-			__('CAPTCHA verification failed. Please try again.', 'cap-captcha')
-		);
-	}
+    if (! cap_captcha_maybe_verify_nonce('login')) {
+        return $user;
+    }
 
-	return $user;
+    $token = cap_captcha_get_token_from_request();
+    if (empty($token) || ! cap_captcha_verify_token($token)) {
+        return new WP_Error(
+            'cap_captcha_failed',
+            __('CAPTCHA verification failed. Please try again.', 'cap-captcha')
+        );
+    }
+
+    return $user;
 }
 
 function cap_captcha_check_registration($errors, $sanitized_user_login, $user_email)
 {
-	if (empty(get_option('cap_captcha_options')['protect_register'])) {
-		return $errors;
-	}
+    if (empty(get_option('cap_captcha_options')['protect_register'])) {
+        return $errors;
+    }
 
-	$token = cap_captcha_get_token_from_request();
-	if (empty($token) || ! cap_captcha_verify_token($token)) {
-		$errors->add(
-			'cap_captcha_failed',
-			__('CAPTCHA verification failed. Please try again.', 'cap-captcha')
-		);
-	}
+    if (! cap_captcha_maybe_verify_nonce('register')) {
+        return $errors;
+    }
 
-	return $errors;
+    $token = cap_captcha_get_token_from_request();
+    if (empty($token) || ! cap_captcha_verify_token($token)) {
+        $errors->add(
+            'cap_captcha_failed',
+            __('CAPTCHA verification failed. Please try again.', 'cap-captcha')
+        );
+    }
+
+    return $errors;
 }
 
 function cap_captcha_check_lostpassword($errors): void
 {
-	if (empty(get_option('cap_captcha_options')['protect_lostpassword'])) {
-		return;
-	}
+    if (empty(get_option('cap_captcha_options')['protect_lostpassword'])) {
+        return;
+    }
 
-	$token = cap_captcha_get_token_from_request();
-	if (empty($token) || ! cap_captcha_verify_token($token)) {
-		$errors->add(
-			'cap_captcha_failed',
-			__('CAPTCHA verification failed. Please try again.', 'cap-captcha')
-		);
-	}
+    if (! cap_captcha_maybe_verify_nonce('lostpassword')) {
+        return;
+    }
+
+    $token = cap_captcha_get_token_from_request();
+    if (empty($token) || ! cap_captcha_verify_token($token)) {
+        $errors->add(
+            'cap_captcha_failed',
+            __('CAPTCHA verification failed. Please try again.', 'cap-captcha')
+        );
+    }
 }
 
 function cap_captcha_check_password_reset($errors, $user): void
 {
-	if (empty(get_option('cap_captcha_options')['protect_lostpassword'])) {
-		return;
-	}
+    if (empty(get_option('cap_captcha_options')['protect_lostpassword'])) {
+        return;
+    }
 
+    if (! cap_captcha_maybe_verify_nonce('reset_password')) {
+        return;
+    }
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified above via cap_captcha_maybe_verify_nonce
 	if (! isset($_POST['cap-token'])) {
-		return;
-	}
+        return;
+    }
 
-	$token = cap_captcha_get_token_from_request();
-	if (empty($token) || ! cap_captcha_verify_token($token)) {
-		$errors->add(
-			'cap_captcha_failed',
-			__('CAPTCHA verification failed. Please try again.', 'cap-captcha')
-		);
-	}
+    $token = cap_captcha_get_token_from_request();
+    if (empty($token) || ! cap_captcha_verify_token($token)) {
+        $errors->add(
+            'cap_captcha_failed',
+            __('CAPTCHA verification failed. Please try again.', 'cap-captcha')
+        );
+    }
 }
 
 function cap_captcha_check_comment(array $commentdata): array
 {
-	if (empty(get_option('cap_captcha_options')['protect_comments'])) {
-		return $commentdata;
-	}
+    if (empty(get_option('cap_captcha_options')['protect_comments'])) {
+        return $commentdata;
+    }
 
-	$token = cap_captcha_get_token_from_request();
-	if (empty($token) || ! cap_captcha_verify_token($token)) {
-		wp_die(
-			'<p>' . esc_html__('CAPTCHA verification failed. Please go back and try again.', 'cap-captcha') . '</p>',
-			esc_html__('CAPTCHA Error', 'cap-captcha'),
-			array('back_link' => true)
-		);
-	}
+    if (! cap_captcha_maybe_verify_nonce('comment')) {
+        return $commentdata;
+    }
 
-	return $commentdata;
+    $token = cap_captcha_get_token_from_request();
+    if (empty($token) || ! cap_captcha_verify_token($token)) {
+        wp_die(
+            '<p>' . esc_html__('CAPTCHA verification failed. Please go back and try again.', 'cap-captcha') . '</p>',
+            esc_html__('CAPTCHA Error', 'cap-captcha'),
+            array('back_link' => true)
+        );
+    }
+
+    return $commentdata;
 }
