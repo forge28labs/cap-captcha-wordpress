@@ -86,7 +86,7 @@ function cap_captcha_inline_styles(): void
 
     echo '<style>' . "\n";
     echo 'cap-widget {' . "\n";
-    echo implode("\n", $rules) . "\n";
+    echo esc_html(implode("\n", $rules)) . "\n";
     echo '}' . "\n";
     echo '</style>' . "\n";
 }
