@@ -1,8 +1,22 @@
 {
+  "name": "cap-captcha-wordpress",
+  "type": "module",
+  "private": true,
   "scripts": {
-    "build": "cp node_modules/cap-widget/cap.min.js assets/cap-widget.js"
+    "check": "wp plugin check",
+    "embed-cap-widget": "cp node_modules/cap-widget/cap.min.js cap-captcha/assets/cap-widget.js",
+    "package": "bun run scripts/package.ts",
+    "build": "bun run embed-cap-widget && bun run package"
   },
   "dependencies": {
     "cap-widget": "^0.1.56"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "fflate": "^0.8.3",
+    "glob": "^13.0.6"
+  },
+  "peerDependencies": {
+    "typescript": "^6.0.3"
   }
 }

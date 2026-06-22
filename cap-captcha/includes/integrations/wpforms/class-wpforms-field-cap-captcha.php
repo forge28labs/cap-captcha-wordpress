@@ -2,6 +2,7 @@
 
 defined('ABSPATH') || exit;
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
 class WPForms_Field_CapCaptcha extends WPForms_Field
 {
     public function init()
