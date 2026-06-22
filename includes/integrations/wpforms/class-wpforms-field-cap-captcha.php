@@ -29,9 +29,9 @@ class WPForms_Field_CapCaptcha extends WPForms_Field
 
         wp_enqueue_script(
             'cap-widget',
-            'https://cdn.jsdelivr.net/npm/cap-widget',
+            CAP_CAPTCHA_PLUGIN_URL . 'assets/cap-widget.js',
             array(),
-            null,
+            CAP_CAPTCHA_VERSION,
             array('in_footer' => true)
         );
 
@@ -117,8 +117,8 @@ class WPForms_Field_CapCaptcha extends WPForms_Field
 
     public function validate($field_id, $field_submit, $form_data)
     {
-        $raw_token = $_POST['cap-token'] ?? '';
-        $token     = sanitize_text_field(wp_unslash($raw_token));
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- validated by WPForms' own nonce
+        $token = sanitize_text_field(wp_unslash($_POST['cap-token'] ?? ''));
 
         if (empty($token)) {
             wpforms()->process->errors[$form_data['id']][$field_id] = esc_html__('Please complete the captcha.', 'cap-captcha');

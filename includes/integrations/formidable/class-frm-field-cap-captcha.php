@@ -2,6 +2,7 @@
 
 defined('ABSPATH') || exit;
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- follows Formidable's naming convention for auto-discovery
 class FrmFieldCapCaptcha extends FrmFieldType
 {
     protected $type = 'cap_captcha';
@@ -81,9 +82,9 @@ class FrmFieldCapCaptcha extends FrmFieldType
 
         wp_enqueue_script(
             'cap-widget',
-            'https://cdn.jsdelivr.net/npm/cap-widget',
+            CAP_CAPTCHA_PLUGIN_URL . 'assets/cap-widget.js',
             array(),
-            null,
+            CAP_CAPTCHA_VERSION,
             array('in_footer' => true)
         );
 
@@ -108,11 +109,11 @@ class FrmFieldCapCaptcha extends FrmFieldType
             return array();
         }
 
-        $raw_token = $_POST['cap-token'] ?? '';
-        $token     = sanitize_text_field(wp_unslash($raw_token));
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- validated by Formidable's own nonce
+        $token = sanitize_text_field(wp_unslash($_POST['cap-token'] ?? ''));
 
         if (empty($token)) {
-            return array('field' . $args['id'] => __('The captcha is missing from this form', 'formidable'));
+            return array('field' . $args['id'] => __('The captcha is missing from this form', 'cap-captcha'));
         }
 
         if (empty($options['secret_key'])) {
