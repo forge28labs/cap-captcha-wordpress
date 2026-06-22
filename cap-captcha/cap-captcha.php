@@ -4,7 +4,7 @@
  * Plugin Name:     Cap Captcha
  * Plugin URI:      https://github.com/forge28labs/cap-captcha-wordpress
  * Description:     Protects WordPress forms (login, register, lost password, comments) with Cap, a self-hosted proof-of-work CAPTCHA.
- * Version:         1.2.0
+ * Version:         1.3.0
  * Requires at least: 7.0
  * Requires PHP:    7.4
  * Author:          Forge28
@@ -17,7 +17,7 @@
 
 defined('ABSPATH') || exit;
 
-define('CAP_CAPTCHA_VERSION', '1.2.0');
+define('CAP_CAPTCHA_VERSION', '1.3.0');
 
 define('CAP_CAPTCHA_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CAP_CAPTCHA_PLUGIN_URL', plugin_dir_url(__FILE__));

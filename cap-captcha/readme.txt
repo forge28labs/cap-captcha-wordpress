@@ -2,7 +2,7 @@
 Contributors: forge28, rtstubbs
 Tags: captcha, cap captcha, security, spam protection, bot protection
 Donate link: https://ryanstubbs.co.uk/support-my-work/
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 7.4
