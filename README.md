@@ -48,7 +48,7 @@ Just pop in and go! The plugin is registered as a field type in these plugins, s
 git clone https://github.com/forge28labs/cap-captcha-wordpress.git
 ```
 
-No external dependencies are required. Just clone the repository into the `wp-content/plugins/` directory and activate the plugin in WordPress.
+Before it's ready to use, you'll need to run the Bun build script. With Bun installed, run `bun install` and then `bun run build`. Then you can copy the now fully-built plugin into the `wp-content/plugins/` directory and activate the plugin in WordPress.
 
 ## Contributing
 
